@@ -1,8 +1,44 @@
-const CAKE_OREDERED = 'CAKE_OREDERED'
+const redux = require('redux')
 
-function orderCade() {
+const createStore = redux.createStore
+
+const CAKE_ORDERED = 'CAKE_ORDERED'
+
+function orderCake() {
     return {
-        type: CAKE_OREDERED,
-        qtd: 1
+        type: CAKE_ORDERED,
+        quantity: 1
     }
 }
+
+const initialState = {
+    numOfCakes: 10
+}
+
+const reducer = (state = initialState, action) => {
+    switch (action.type) {
+        case CAKE_ORDERED:
+            return {
+                ...state,
+                numOfCakes: state.numOfCakes - 1
+            }
+        default:
+            return state
+    }
+}
+
+const store = createStore(reducer)
+console.log('Estado inicial', store.getState())
+
+const unsubscribe = store.subscribe(() => 
+    console.log('Estado atualizado', store.getState())
+)
+
+store.dispatch({
+    type: CAKE_ORDERED,
+    quantity: 1
+})
+store.dispatch(orderCake())
+store.dispatch(orderCake())
+
+unsubscribe()
